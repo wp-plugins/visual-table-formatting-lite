@@ -15,7 +15,7 @@ Create html tables using a visual edtior.
 Creating and managing colorful tables has never been more intuitive and straightforward with this plugin. The visual editor will keep you away from coding and shortcode complexity. Apply cell color, font color, font styles, table border style and color. The plugin has two handy import functions - used shortcodes and delimiter-separated text, which will create the table automatically for you. It also completely avoids the site database, thus making it lightweight and easily transferable between different posts or wordpress installations.
 
 For support visit the 
-[Main Homapage](http://www.w3examples.com)
+[Main Homepage](http://www.w3examples.com)
 
 == Installation ==
 Upload the Visual Table Formatting Lite plugin to your blog and activate it.
