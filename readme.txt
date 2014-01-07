@@ -23,8 +23,8 @@ The plugin has two handy import functions - used shortcodes and delimiter-separa
 
 [youtube http://www.youtube.com/watch?v=OohAxCGatOo]
 
-For support visit the 
-[Main Homepage](http://www.w3examples.com)
+Howtos with screenshots
+[Plugin Howtos](http://www.w3examples.com/wordpress/table_formatting_lite.php)
 
 == Installation ==
 Upload the Visual Table Formatting Lite plugin to your blog and activate it.
