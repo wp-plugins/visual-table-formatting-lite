@@ -192,58 +192,6 @@ W3Ex.vtfModule = (function ($) {
 			}
 		}
 		
-		var st = FindString(textshortcode,"st=\"","\"");
-		if(st != "")
-		{//get style
-			var arrCols = st.split(";");
-			for(var j=0; j < arrCols.length ; j++)
-			{
-				if(arrCols[j] != undefined && arrCols[j] != "")
-				{
-					var colitem = arrCols[j];
-					if(colitem === "man")
-					{
-						$('#w3exvtf-manual').prop('checked',true);
-					}
-					if(colitem.indexOf(":")!=-1)
-					{
-						var prop = colitem.substring(0,colitem.indexOf(":"));
-						var value = colitem.substring(colitem.indexOf(":") + 1,colitem.length);
-						switch(prop){
-							case "h":{//height
-								$('#w3exvtf-lheight').val(value);
-							}break;
-							case "t":{//top
-								$('#w3exvtf-ptop').val(value);
-							}break;
-							case "r":{//right
-								$('#w3exvtf-pright').val(value);
-							}break;
-							case "b":{//bottom
-								$('#w3exvtf-pbottom').val(value);
-							}break;
-							case "l":{//left
-								$('#w3exvtf-pleft').val(value);
-							}break;
-							case "w":{//width
-								$('#w3exvtf-twidth').val(value);
-							}break;
-							case "cl":{
-								$('#w3exvtf-usecss').prop('checked',true);
-								$('#w3exvtf-classn').val(value);
-							}break;
-							case "bc":{
-								_custstyle.borderc = "#" + value.toString();
-								_custstyle.applyborderc = true;
-							}break;
-							case "bt":{
-								_custstyle.bordert = parseInt(value,10);
-							}break;
-						  }
-						}
-					}				
-				}
-			}
 			var text =  FindString(textshortcode,"]\n","[/");
 			var split = text.split(';nn;\n');
 			var lines = [];
@@ -492,55 +440,6 @@ W3Ex.vtfModule = (function ($) {
 			}
 		}
 		textfontcols = textfontcols.replace(/#/g,"");
-		var selected = $('input[name=w3exvtf-css]:checked').val()
-		if(selected == "usecss")
-		{
-			var classn = $('#w3exvtf-classn').val();
-			if(!isBlank(classn))
-			{
-				textst = "cl:" + classn + ";";			
-			}
-		}else if(selected == "manual")
-		{
-			var lheight = $('#w3exvtf-lheight').val(); 
-			var ptop = $('#w3exvtf-ptop').val();
-			var pright = $('#w3exvtf-pright').val();
-			var pbottom = $('#w3exvtf-pbottom').val();
-			var pleft = $('#w3exvtf-pleft').val();
-			var twidth = $('#w3exvtf-twidth').val();
-			textst+="man;";
-			if(!isBlank(lheight))
-			{
-				textst+= "h:" + lheight + ";";
-			}
-			if(!isBlank(ptop))
-			{
-				textst+= "t:" + ptop + ";";
-			}
-			if(!isBlank(pright))
-			{
-				textst+= "r:" + pright + ";";
-			}
-			if(!isBlank(pbottom))
-			{
-				textst+= "b:" + pbottom + ";";
-			}
-			if(!isBlank(pleft))
-			{
-				textst+= "l:" + pleft + ";";
-			}
-			if(!isBlank(twidth))
-			{
-				textst+= "w:" + twidth + ";";
-			}
-		}
-	  	{//custom border and row over style
-			var color = _custstyle.borderc;
-			color = color.toString();
-			color = color.replace(/#/g,"");
-			textst+= "bc:" + color + ";";
-			textst+= "bt:" + _custstyle.bordert + ";";
-		}
 		if(textcols !== "")
 		{
 			text = "cols=\"" + 	textcols + "\"";
@@ -889,24 +788,6 @@ W3Ex.vtfModule = (function ($) {
 	 
 	function cellRenderer(instance, td, row, col, prop, value, cellProperties) {
 		Handsontable.TextCell.renderer.apply(this, arguments);
-      //border
-		if(_custstyle.applyborderc)
-		{
-			if(_custstyle.bordert !== 0)
-		   	{
-				var rowb = false;
-			    if(_custstyle.bordert === 1)
-					rowb = true;
-				if(rowb)
-				{
-					td.style.borderBottomColor = _custstyle.borderc;
-					td.style.borderTopColor = _custstyle.borderc;
-				}else
-				{
-					 td.style.borderColor = _custstyle.borderc;
-				}
-		   }
-		}
 
 		if(_cellsize == 1)
 		{
@@ -1251,10 +1132,6 @@ W3Ex.vtfModule = (function ($) {
 				$(_but.remcolor).button("disable");
 				RefreshTable();
 			});
-			$("#w3exvtf-advanced" ).accordion({
-				collapsible: true,
-				active:false
-			});
 			$(_but.remcolor).button("disable");
 			$(_but.italic).button().click(function(e){
 				var isset = $(_but.italic).prop('checked');
@@ -1340,80 +1217,6 @@ W3Ex.vtfModule = (function ($) {
 			});
 			$('#w3exvtf-genshortcode').button().click(function(){
 				GenerateFromShortcode();
-			});
-			$("#w3exvtf-dialogstyles").dialog({			
-	            autoOpen: false,
-	            height: 280,
-	            width: 830,
-	            modal: true,
-  				draggable:false,
-				resizable:false,
-				closeOnEscape: false,
-				open: function( event, ui ) {
-					$("#w3exvtf-custom-border").spectrum({
-						color:_custstyle.borderc,
-						className: "full-spectrum",
-						showPalette: true,
-						showInput: true,
-						showSelectionPalette: true,
-						maxPaletteSize: 10,
-						preferredFormat: "hex",
-		                palette: _arrPalette
-          			});
-					$("#w3exvtf-custom-mouseover").spectrum({
-						color:_custstyle.rowc,
-						className: "full-spectrum",
-						showPalette: true,
-						showInput: true,
-						showSelectionPalette: true,
-						maxPaletteSize: 10,
-						preferredFormat: "hex",
-		                palette: _arrPalette
-          			});
-					_custstyle.ispremadec = false;
-					switch(_custstyle.bordert)
-					{
-						case 0:
-						{ $('#w3exvtf-noborders').prop('checked',true);}break;
-						case 1:
-						{ $('#w3exvtf-rowborders').prop('checked',true);}break;
-						case 2:
-						{ $('#w3exvtf-cellborders').prop('checked',true);}break;
-					}
-					//jquery messes up with thick box
-					 var d = $('.ui-dialog:visible');
-					 $(d).css('z-index',300002);
-					  $('.ui-widget-overlay').each(function () {
-       					 $(this).next('.ui-dialog').andSelf().wrapAll('<div class="w3exvtfscope w3exvtfdel" />');
-    				});
-					$('span.ui-icon-closethick').css({
-													   left : '0px',
-													   top : '0px'
-													});
-					if(W3Ex.vtfModuleOut !== undefined )
-					   W3Ex.vtfModuleOut.SetRemove(true);
-  
-				},
-				close: function( event, ui ) {
-					$(".w3exvtfdel").contents().unwrap();
-					$("#w3exvtf-custom-border").spectrum("destroy");
-					if(W3Ex.vtfModuleOut !== undefined )
-						W3Ex.vtfModuleOut.SetRemove(false);
-				},
-       			 buttons: {
-	              "OK": function() {
-				  	 _custstyle.applyborderc = true;
-					 _custstyle.borderc = $("#w3exvtf-custom-border").spectrum("get");
-					 var selected = $('input[name=w3exvtf-custstyle]:checked').val()
-					 _custstyle.bordert = parseInt(selected,10);
-					 RefreshTable();
-	                 $( this ).dialog( "close" );
-	              },
-	              Cancel: function()
-				  {
-					  $( this ).dialog( "close" );
-	              }
-	            }
 			});
 		})();
     

@@ -16,12 +16,12 @@ Creating and managing colorful tables has never been more intuitive and straight
 
 The visual editor will keep you away from **coding and shortcode** complexity.
 
-Apply cell color, font color, font styles, table border style and color.
+Apply cell color, font color and font styles.
 
 The plugin has two handy import functions - used shortcodes and delimiter-separated text, which will create the table automatically for you. It also completely avoids the site database, thus making it lightweight and easily transferable between different posts or wordpress installations.
 
 
-[youtube http://www.youtube.com/watch?v=Du26QriPN8U]
+[youtube http://www.youtube.com/watch?v=OohAxCGatOo]
 
 For support visit the 
 [Main Homepage](http://www.w3examples.com)

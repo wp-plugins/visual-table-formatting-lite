@@ -126,7 +126,6 @@ function w3examples_vtftable( $atts,$content=NULL ) {
 	extract( shortcode_atts( array(
 		'cols' => '',
 		'fols' => '',
-		'st' => ''
 	), $atts ) );
 	$arrColors = array();
 	$arrFontColors = array();
@@ -144,74 +143,6 @@ function w3examples_vtftable( $atts,$content=NULL ) {
 	$mantdstyle = "";
 	$borderc = "";
 	$bordernone = false;
-	if($st !== '')
-	{
-		$arrCols = explode(";",$st);
-		$arrRow = array();
-		foreach ($arrCols as $Col)
-		{
-			if(strpos($Col,":") !== FALSE)
-			{
-				$prop = w3exvtfGetBetween($Col,0,strpos($Col,":"));
-				$value = w3exvtfGetBetween($Col,strpos($Col,":") + 1,strlen($Col));
-				switch($prop){
-					case "h":{//height
-						if(((int)$value >= 0) && ((int)$value < 500))
-							$mantdstyle.= "\theight:".$value."px;\n";
-					}break;
-					case "t":{//top
-						if(((int)$value >= 0) && ((int)$value < 500))
-							$mantdstyle.= "\tpadding-top:".$value."px;\n";
-					}break;
-					case "r":{//right
-						if(((int)$value >= 0) && ((int)$value < 500))
-							$mantdstyle.= "\tpadding-right:".$value."px;\n";
-					}break;
-					case "b":{//bottom
-						if(((int)$value >= 0) && ((int)$value < 500))
-							$mantdstyle.= "\tpadding-bottom:".$value."px;\n";
-					}break;
-					case "l":{//left
-						if(((int)$value >= 0) && ((int)$value < 500))
-							$mantdstyle.= "\tpadding-left:".$value."px;\n";
-					}break;
-					case "w":{//width
-						if(((int)$value >= 0) && ((int)$value <= 100))
-							$mantabstyle.=  $tabid." {width:".$value."%;}\n";
-					}break;
-					case "cl":{
-						$tclass = $value;
-					}break;
-					case "bc":{
-						if(((int)$value >= 0x000000) && ((int)$value <= 0xffffff))
-							$borderc = $tabid. " td {border-color:#".$value.";}\n";
-					}break;
-					case "bt":{
-						$tstyle.= $tabid. " td {\n";
-						$bordert = (int)$value;
-						if($bordert == 2)
-							$tstyle.= "\tborder:1px solid;\n";
-						else if($bordert == 0)
-						{
-							$tstyle.= "\tborder:none;\n";
-							$bordernone = true;
-						}
-						else
-						{
-							$tstyle.= "\tborder:none;\n";
-							$tstyle.= "\tborder-top:1px solid;\n";
-							$tstyle.= "\tborder-bottom:1px solid;\n";
-						}
-						$tstyle.= "}\n";
-					}break;
-					default:
-						break;
-				}
-			}
-		}
-	}
-	if($borderc !== "" && !$bordernone)
-		$tstyle.= $borderc;
 	if($mantabstyle !== "")
 	{
 		$tstyle.= $mantabstyle;

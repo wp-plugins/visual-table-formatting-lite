@@ -25,7 +25,6 @@ defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 	<td style="padding-top:3px;"><input class="jqButton" type="checkbox" id="w3exvtf-makeunder"><label for="w3exvtf-makeunder"><b><u>U</u></b></label></td>
 	<td style="padding-top:3px;"><input class="jqButton" type="checkbox" id="w3exvtf-makestrike"><label for="w3exvtf-makestrike"><b><strike>S</strike></b></label>&nbsp;&nbsp;</td>
 		<td>Cell Size: <button id="w3exvtf-cellmin">-</button><button id="w3exvtf-cellplus">+</button>&nbsp;&nbsp;</td>
-		<td><button id="w3exvtf-createuser">Style</button></td>
 		</tr>
 	</table>
 </div>
@@ -48,38 +47,6 @@ defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 	<div id="w3exvtf-thetable">
 	</div>
  <div style="clear:both">&nbsp;</div>
-</div>
-<div id="w3exvtf-advanced" class="centered">
-<h3>Advanced Settings</h3>
-<div>
-	<table>
-		<tr>
-			<td style="width:35%;">
-			<input type="radio" name="w3exvtf-css" value="theme" checked="checked" id="w3exvtf-theme">
-				<label for="w3exvtf-theme">Use theme's settings for cell &nbsp;&nbsp;&nbsp;&nbsp;height and table width</label>
-			</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr>
-			<td>
-			<input type="radio" name="w3exvtf-css" value="manual" id="w3exvtf-manual">
-				<label for="w3exvtf-manual">Manual</label>
-			</td>
-			<td>
-				Cell min-height (px) &nbsp;<input type="text" name="lheight" id="w3exvtf-lheight" value="22"><br /><br />
-				Cell padding (px) top:<input type="text" name="ptop" id="w3exvtf-ptop" value="4"> right:<input type="text" name="pright" id="w3exvtf-pright" value="0"> bottom:<input type="text" name="pbottom" id="w3exvtf-pbottom" value="4"> left:<input type="text" name="pleft" id="w3exvtf-pleft" value="0"><br /><br />
-				Table width (%)  &nbsp;<input type="text" name="twidth" id="w3exvtf-twidth" value="100" style="width:40px;">
-			</td>
-		</tr>
-		<tr>
-			<td style="border:none;">
-			<input type="radio" name="w3exvtf-css" value="usecss" id="w3exvtf-usecss">
-				<label for="w3exvtf-usecss">Use this css class</label>
-			</td>
-			<td style="border:none;">Class name:<input type="text" name="classn" id="w3exvtf-classn" style="width:150px;"></td>
-		</tr>
-	</table>
-</div>
 </div>
 <br />
 <br />
