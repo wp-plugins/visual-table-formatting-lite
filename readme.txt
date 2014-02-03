@@ -20,7 +20,7 @@ Apply cell color and font style with a couple of clicks.
 
 The plugin has two handy import functions - used shortcodes and delimiter-separated text, which will create the table automatically for you. It also completely avoids the site database, thus making it lightweight and easily transferable between different posts or wordpress installations.
 
-[youtube http://www.youtube.com/watch?v=OohAxCGatOo]
+[youtube http://www.youtube.com/watch?v=eD34FXp5_jc]
 
 There is also a **PRO** version available [here](http://www.w3examples.com/wordpress/visual_table_formatting_pro.php)
 
