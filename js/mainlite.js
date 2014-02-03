@@ -12,12 +12,6 @@ W3Ex.vtfModule = (function ($) {
 	var _selected;
 	var _thetable = "#w3exvtf-thetable";
 	var _htable;
-	var _custstyle = {
-		"borderc":"#bbbbbb",
-		"applyborderc":false,
-		"skipapp":true,
-		"bordert":1,
-	}
 	var _arrPalette = [
 		["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)", 
 		"rgb(204, 204, 204)", "rgb(217, 217, 217)",  "rgb(255, 255, 255)"],
@@ -112,77 +106,6 @@ W3Ex.vtfModule = (function ($) {
 										var colorItem = {};
 										colorItem.color = cellcolor;
 										datarow[singlecol] = colorItem;
-									}
-								}
-							}
-						}
-					}
-				}	
-			}
-		}
-		var fols = FindString(textshortcode,"fols=\"","\"");
-		if(fols !== "")
-		{//get rows
-			var arrRows = FindString(fols,"{","}",true);
-			if(arrRows !== undefined)
-			{
-				for(var i=0;i<arrRows.length;i++)
-				{
-					if(arrRows[i] != undefined)
-					{
-						var Row = arrRows[i];
-						var arrCols = Row.split(";");
-						var datarow = [];
-						if(_arrColors[i] !== undefined)
-							datarow = _arrColors[i];
-						else
-						 	_arrColors[i] = datarow;
-						for(var j=0; j < arrCols.length ; j++)
-						{
-							if(arrCols[j] !== undefined && arrCols[j] !==  "")
-							{
-								var colitem = arrCols[j];
-								if(colitem.indexOf(":") !== -1)
-								{
-									var cells = colitem.substring(0,colitem.indexOf(":"));
-									var cellcolor = colitem.substring(colitem.indexOf(":") + 1,colitem.length);
-									cellcolor = "#" + cellcolor;
-									if(cells.indexOf("-") !== -1)
-									{//multiple
-										var start = cells.substring(0,cells.indexOf("-"));
-										var end   = cells.substring(cells.indexOf("-") +1 , cells.length);
-										start = parseInt(start,10);
-										end = parseInt(end,10);
-										if(start < end && (start >=0 && end <=1000 ))
-										{
-											while(start <= end)
-											{
-												if(datarow[start] !== undefined)
-												{
-													var colorItem = datarow[start];
-													colorItem.fontColor = cellcolor;
-												}else
-												{
-													var colorItem = {};
-													colorItem.fontColor = cellcolor;
-													datarow[start] = colorItem;
-												}
-												start++;
-											}	
-										}
-									}else
-									{//single
-										var singlecol = parseInt(cells,10);
-										if(datarow[singlecol] !== undefined)
-										{
-											var colorItem = datarow[singlecol];
-											colorItem.fontColor = cellcolor;
-										}else
-										{
-											var colorItem = {};
-											colorItem.fontColor = cellcolor;
-											datarow[singlecol] = colorItem;
-										}
 									}
 								}
 							}
@@ -351,103 +274,10 @@ W3Ex.vtfModule = (function ($) {
 			}
 		}
 		textcols = textcols.replace(/#/g,"");
-		for(var i=0 ; i < _arrColors.length ; i++)
-		{
-			if(_arrColors[i] === undefined) continue;
-			var arrRow = _arrColors[i];
-			var colorbefore = null;
-			var colorbindex = -1;
-		    var textcolstemp = textfontcols;
-			textfontcols = "";
-			for(var j = 0; j < arrRow.length ; j++)
-			{
-				if(arrRow[j] == undefined)
-				{
-					if(colorbindex != -1 && (colorbefore !== null && colorbefore !== undefined))
-					{
-						if((j - colorbindex) > 1)
-						{//store as multivalue
-							textfontcols+= colorbindex.toString() + "-" + (j-1).toString() + ":" + colorbefore + ";";
-						}else
-						{//single
-							textfontcols+= (j-1).toString() + ":" + colorbefore + ";";
-						}	
-					}
-					colorbefore = null;
-					colorbindex = -1;
-					 continue;
-				}
-				var colorItem = arrRow[j];
-				if(colorItem.fontColor !== undefined)
-				{
-					if(colorItem.fontColor !== colorbefore)
-					{
-						if(colorbindex !== -1 && (colorbefore !== null && colorbefore !== undefined))
-						{
-							if((j - colorbindex) > 1)
-							{//store as multivalue
-								textfontcols+= colorbindex.toString() + "-" + (j-1).toString() + ":" + colorbefore + ";";
-							}else
-							{//single
-								textfontcols+= colorbindex.toString() + ":" + colorbefore + ";";
-							}	
-						}
-						if(j == (arrRow.length - 1))
-						{//last item, store current
-							textfontcols+= j.toString() + ":" + colorItem.fontColor + ";";
-						}	
-						colorbefore = colorItem.fontColor;
-						colorbindex = j;
-					}else
-					{//same color
-						if(j == (arrRow.length - 1))
-						{//last item
-							if(colorbindex != -1 && (colorbefore !== null && colorbefore !== undefined))
-							{
-								if((j - colorbindex) >= 1)
-								{//store as multivalue
-									textfontcols+= colorbindex.toString() + "-" + (j).toString() + ":" + colorbefore + ";";
-								}else
-								{//single
-									textfontcols+= (j).toString() + ":" + colorbefore + ";";
-								}	
-							}
-						}
-					}
-					
-				}else
-				{
-					if(colorbindex != -1 && (colorbefore !== null && colorbefore !== undefined))
-					{
-						if((j - colorbindex) > 1)
-						{//store as multivalue
-							textfontcols+= colorbindex.toString() + "-" + (j-1).toString() + ":" + colorbefore + ";";
-						}else
-						{//single
-							textfontcols+= (j-1).toString() + ":" + colorbefore + ";";
-						}	
-					}
-					colorbefore = null;
-					colorbindex = j;
-				}
-			}
-			if(textfontcols != "")
-			{//add row
-				textfontcols = textcolstemp + "{" + i + "}" + textfontcols + "{/}";
-			}else
-			{
-				textfontcols = textcolstemp;
-			}
-		}
-		textfontcols = textfontcols.replace(/#/g,"");
 		if(textcols !== "")
 		{
 			text = "cols=\"" + 	textcols + "\"";
 		}	
-		if(textfontcols !== "")
-		{
-			text += " fols=\"" + 	textfontcols + "\"";
-		}
 		if(textst !== "")
 		{
 			text+= " st=\"" + textst + "\"";
@@ -513,80 +343,7 @@ W3Ex.vtfModule = (function ($) {
 		return allarrs;
 	}
 
-	function ChangeFontColor(color,parrSel,coloristring,pdelete)  
-	{
-		parrSel = typeof parrSel !== 'undefined' ? parrSel : _htable.getSelected();
-		coloristring = typeof coloristring !== 'undefined' ? coloristring : false;
-		pdelete = typeof pdelete !== 'undefined' ? pdelete : false;
-        var colorhex;
-		if(coloristring)
-			colorhex = color;
-		else
-			colorhex = color.toHexString(); 
-		if(typeof parrSel === "undefined") return;
-		var ArrsSel = [];
-		if(!pdelete)
-			ArrsSel = GetAllArrs(parrSel);
-		else
-			ArrsSel.push(parrSel);
-	    for(var j=0; j < ArrsSel.length; j++)
-		{
-			var currArr = ArrsSel[j];
-			var startx,starty,endx,endy,startyval;		
-			startx = currArr[0];
-			starty = currArr[1];
-			endx   = currArr[2];
-			endy   = currArr[3];
-			startyval = starty;
-			while(startx <= endx)
-			{
-				if(_arrColors[startx] !== undefined)					
-				{
-					var rowArr = _arrColors[startx];
-					starty = startyval;					
-				    while(starty <= endy)
-				    {
-						if(rowArr[starty] !== undefined)
-						{
-							var colorItem = rowArr[starty];
-							if(pdelete)
-							{
-								if(colorItem.fontColor !== undefined)
-									delete colorItem.fontColor;
-							}else
-						    	colorItem.fontColor = colorhex;	
-						 }else
-						 {
-						 	if(!pdelete)
-							{
-								var colorItemNew = {};
-								colorItemNew.fontColor = colorhex;
-								rowArr[starty] = colorItemNew;
-							}
-						 }
-					     starty++;
-					}
-				}else
-				{
-					if(!pdelete)
-					{
-						var rowArr = [];
-						starty = startyval;					
-					    while(starty <= endy)
-					    {
-							var colorItemNew = {};
-							colorItemNew.fontColor = colorhex;
-							rowArr[starty] = colorItemNew;
-						    starty++;
-						}
-						_arrColors[startx] = rowArr;
-					}
-				}	
-				startx++;
-			}
-		}
-		RefreshTable();
-	}
+	
 	function ChangeColor(color,parrSel,coloristring,pdelete) 
 	{
 		parrSel = typeof parrSel !== 'undefined' ? parrSel : _htable.getSelected();
@@ -809,10 +566,6 @@ W3Ex.vtfModule = (function ($) {
 				{
 					td.style.backgroundColor = colorItem.color;
 				}
-				if(colorItem.fontColor !== undefined)
-				{
-					td.style.color = colorItem.fontColor;
-				}
 				if(colorItem.fflags !== undefined)
 				{
 					if(colorItem.fflags & _F.BOLD)
@@ -1030,18 +783,6 @@ W3Ex.vtfModule = (function ($) {
 				change: ChangeColor,
                 palette: _arrPalette
           	});
-			$("#w3exvtf-custom-font").spectrum({
-				color:'#000000',
-				className: "full-spectrum",
-				appendTo: "#w3exvtf-topparent",
-				showPalette: true,
-				showInput: true,
-				showSelectionPalette: true,
-				maxPaletteSize: 10,
-				preferredFormat: "hex",
-				change: ChangeFontColor,
-                palette: _arrPalette
-          	});
 			$('#w3exvtf-colsm').click(function(){
 				var Cols = _htable.countCols();
 				Cols--;
@@ -1149,9 +890,7 @@ W3Ex.vtfModule = (function ($) {
 				var isset = $(_but.bold).prop('checked');
 				SetRangeFormat(_F.BOLD,isset);
         	 });
-			$("#w3exvtf-createuser").button().click(function() {
-            	$("#w3exvtf-dialogstyles").dialog("open");
-			});
+			
 			$('#w3exvtf-gendata').button().click(function(){
 				var text = $('#w3exvtf-importdata').val();
 				if(isBlank(text)) return;
