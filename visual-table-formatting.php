@@ -124,47 +124,12 @@ function w3exvtfGetFormat(&$col,&$style,$inmerge=false)
 }
 function w3examples_vtftable( $atts,$content=NULL ) {
 	extract( shortcode_atts( array(
-		'cols' => '',
-		'fols' => '',
+		'cols' => ''
 	), $atts ) );
 	$arrColors = array();
-	$arrFontColors = array();
 	$html = "";
 	w3exvtfGetColors($cols,$arrColors);
-	w3exvtfGetColors($fols,$arrFontColors);
-	$tstyle = "";
-	$tabid = "w3t";
-	$tabid = $tabid . (string)rand(1,1000);
-	$tabidt = $tabid;
-	$tabid = "table#".$tabid;
-	$tablestyle = "";
-	$tclass = "";
-	$mantabstyle = "";
-	$mantdstyle = "";
-	$borderc = "";
-	$bordernone = false;
-	if($mantabstyle !== "")
-	{
-		$tstyle.= $mantabstyle;
-	}
-	if($mantdstyle !== "")
-	{
-		$tstyle.= $tabid." td {\n".$mantdstyle."}\n";
-	}
-	if($tstyle !== '')
-	{
-		$html = "<style>\n";
-		$html.= $tabid."{\n";
-		if($tablestyle != "")
-		$html.= $tablestyle;
-		$html.= "\tborder-collapse: collapse;}\n";
-		$html.= $tstyle;
-		$html.= "</style>\n";
-	}
-	if($tclass === "")
-		$html.= "<table id=\"".$tabidt."\">\n";
-	else
-		$html.= "<table id=\"".$tabidt."\" class=\"".$tclass."\">\n";
+	$html.= "<table>\n";
 	$rows =  array_map('trim', explode(";nn;",$content));
 	$rowcounter = 0;
 	$arrtable = array();
@@ -183,19 +148,12 @@ function w3examples_vtftable( $atts,$content=NULL ) {
 	{
 		$arrrow = $arrtable[$ir];
 		$hascolorrow = false;
-		$hasfontrow = false;
-		$arrFontRow = array();
 		$arrColRow = array();
 		$html.="<tr>\n";
 		if(array_key_exists($ir,$arrColors))
 		{
 			$arrColRow = $arrColors[$ir];
 			$hascolorrow = true;
-		}
-		if(array_key_exists($ir,$arrFontColors))
-		{
-			$arrFontRow = $arrFontColors[$ir];
-			$hasfontrow = true;
 		}
 		for($ic = 0; $ic < count($arrrow); $ic++)
 		{
@@ -208,14 +166,6 @@ function w3examples_vtftable( $atts,$content=NULL ) {
 				{
 					$color = $arrColRow[$ic];
 					$style = "background-color:".$color.";";
-				}
-			}
-			if($hasfontrow)
-			{
-				if(array_key_exists($ic,$arrFontRow))
-				{
-					$color = $arrFontRow[$ic];
-					$style.= "color:".$color.";";
 				}
 			}
 			w3exvtfGetFormat($col,$style);

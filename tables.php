@@ -18,7 +18,6 @@ defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 <table class="tabletool">
 <tr>
 	<td style="padding-top:3px;">Cell: <input type='text' id="w3exvtf-custom" /></td>
-	<td style="padding-top:3px;">Font: <input type='text' id="w3exvtf-custom-font" /></td>
 	<td><button id="w3exvtf-removecolor">Remove color</button>&nbsp;&nbsp;</td>
 	<td style="padding-top:3px;"><input class="jqButton" type="checkbox" id="w3exvtf-makebold"><label for="w3exvtf-makebold"><b>B</b></label></td>
 	<td style="padding-top:3px;"><input class="jqButton" type="checkbox" id="w3exvtf-makeitalic"><label for="w3exvtf-makeitalic"><b><i>I</i></b></label></td>
