@@ -30,7 +30,338 @@ W3Ex.vtfModule = (function ($) {
     ];
 	var _F = {"BOLD":1,"ITALIC":2,"UNDERLINE":4,"STRIKE":8};
 	var _but = {"remcolor":"#w3exvtf-removecolor","bold":"#w3exvtf-makebold","italic":"#w3exvtf-makeitalic",
-	"underline":"#w3exvtf-makeunder","strike":"#w3exvtf-makestrike","italic":"#w3exvtf-makeitalic","remcolor":"#w3exvtf-removecolor"};
+	"underline":"#w3exvtf-makeunder","strike":"#w3exvtf-makestrike","italic":"#w3exvtf-makeitalic","left":"#w3exvtf-left","right":"#w3exvtf-right",
+	"up":"#w3exvtf-up","down":"#w3exvtf-down","remcolor":"#w3exvtf-removecolor"};
+	
+	function HandleObject(source)
+	{
+		var dest;
+		if(source === undefined) return dest;
+	 	var newobj = {};
+		for(var propd in source)
+		{
+			newobj[propd] = source[propd];
+		}
+		dest = newobj;
+		return dest;
+	}
+	function HandleMove(direction)
+	{
+		 var selArr = _htable.getSelected();
+		 if(typeof selArr === "undefined") return;
+		 if(selArr.length !== 4) return; //some bug encountered
+		 var startx,starty,endx,endy,tmp,startyval,startxval,endxval,endyval;				
+		 startx = selArr[0]; //start row
+		 starty = selArr[1]; //start col
+		 endx   = selArr[2]; //end row
+		 endy   = selArr[3]; //end col
+		 var colcount = _htable.countCols();
+		 var rowcount = _htable.countRows();
+		  //check for reverse selection
+		 if(startx > endx)
+		 {
+		 	tmp = endx;
+			endx = startx;
+			startx = tmp;
+		 }
+		 if(starty > endy){
+		 	tmp = endy;
+			endy = starty;
+			starty = tmp;
+		 }
+		 startyval = starty;
+		 startxval = startx;
+		 endxval   = endx;
+		 endyval   = endy;
+		 var selecttext = $('#w3exvtf-text').find(":selected").val();
+		 var ifmove = true;
+		 var iftext = true;
+		 var ifformat = true;
+		 if($('#w3exvtf-move').find(":selected").val() !== "move")
+		 	ifmove = false;
+		 if(selecttext === "text")
+		 	ifformat = false;
+		 if(selecttext === "format")
+		 	iftext = false;
+		 if(direction === "up" || direction ==="down")
+		 {
+		 	var rowsource = [];
+			var rowmove = [];
+			var indexx = startx - 1;
+			if(direction === "down") 
+				indexx = startx + 1;
+			if(iftext)
+			{
+				if(_dataItems[indexx] !== undefined)
+				{//get data from upper row
+					var row = _dataItems[indexx];
+					while(starty <= endy)
+					{
+						rowsource[starty] = row[starty];
+						starty++;
+					}
+					starty = startyval;
+				}
+				
+				if(_dataItems[startx] !== undefined)
+				{//get data from upper row
+					var row = _dataItems[startx];
+					while(starty <= endy)
+					{
+						rowmove[starty] = row[starty];
+						if(ifmove)
+							row[starty] = rowsource[starty];
+						starty++;
+					}
+					starty = startyval;
+				}else{
+					if(rowsource.length != 0 && ifmove)
+					_dataItems[startx] = rowsource;
+				}
+				if(_dataItems[indexx] !== undefined)
+				{
+					var row = _dataItems[indexx];
+					while(starty <= endy)
+					{
+						row[starty] = rowmove[starty];
+						starty++;
+					}
+					starty = startyval;
+				}else{
+					if(rowmove.length != 0)
+					_dataItems[indexx] = rowmove;
+				}
+				//move special
+				var rowsource = [];
+				var rowmove = [];
+				//////////
+				{
+					if(_arrSpecial[indexx] !== undefined)
+					{//get data from upper row
+						var row = _arrSpecial[indexx];
+						while(starty <= endy)
+						{
+							rowsource[starty] = row[starty];
+							starty++;
+						}
+						starty = startyval;
+					}
+					if(_arrSpecial[startx] !== undefined)
+					{//get data from sel row
+						var row = _arrSpecial[startx];
+						while(starty <= endy)
+						{
+							rowmove[starty] = HandleObject(row[starty]);
+							if(ifmove)//row[starty] = rowsource[starty];//copy
+								row[starty] = HandleObject(rowsource[starty]);
+							starty++;
+						}
+						starty = startyval;
+					}else{
+						if(rowsource.length != 0 && ifmove)
+						_arrSpecial[startx] = rowsource;
+					}
+					if(_arrSpecial[indexx] !== undefined)//upperrow
+					{
+						var row = _arrSpecial[indexx];
+						while(starty <= endy)
+						{
+							row[starty] = rowmove[starty];
+							starty++;
+						}
+						starty = startyval;
+					
+					}else{
+						if(rowmove.length != 0)
+						_arrSpecial[indexx] = rowmove;
+					}
+				}
+			}
+			//move format
+			var rowsource = [];
+			var rowmove = [];
+			if(ifformat)
+			{
+				if(_arrColors[indexx] != undefined)
+				{//get data from upper row
+					var row = _arrColors[indexx];
+					while(starty <= endy)
+					{
+						rowsource[starty] = row[starty];
+						starty++;
+					}
+					starty = startyval;
+				}
+				if(_arrColors[startx] !== undefined)
+				{//get data from upper row
+					var row = _arrColors[startx];
+					while(starty <= endy)
+					{
+						rowmove[starty] = HandleObject(row[starty]);
+						if(ifmove)
+							row[starty] = HandleObject(rowsource[starty]);
+						starty++;
+					}
+					starty = startyval;
+				}else{
+					if(rowsource.length != 0 && ifmove)
+					_arrColors[startx] = rowsource;
+				}
+				if(_arrColors[indexx] !== undefined)
+				{
+					var row = _arrColors[indexx];
+					while(starty <= endy)
+					{
+						row[starty] = rowmove[starty];
+						starty++;
+					}
+					starty = startyval;
+				}else{
+					if(rowmove.length != 0)
+					_arrColors[indexx] = rowmove;
+				}
+			}
+			if(direction == "down") 
+			{
+				startx++;
+				endx++;
+			}else
+			{
+				startx--;
+				endx--;
+			}
+		 }else if(direction == "left" || direction == "right")
+		 {
+		 	var rowsource = [];
+			var rowmove = [];
+			var indexy = starty - 1;
+			if(direction == "right")
+			   indexy = starty + 1;
+			if(iftext)
+			{
+				while(startx <= endx)
+				{
+					if(_dataItems[startx] !== undefined)
+					{
+						var row = _dataItems[startx];
+						rowsource[startx] = row[indexy];
+					}
+					startx++;
+				}
+				startx = startxval;
+				while(startx <= endx)
+				{
+					if(_dataItems[startx] !== undefined)
+					{
+						var row = _dataItems[startx];
+						rowmove[startx] = row[starty];
+						if(ifmove)
+							row[starty] = rowsource[startx];
+					}
+					startx++;
+				}
+				startx = startxval;
+				while(startx <= endx)
+				{
+					if(_dataItems[startx] !== undefined)
+					{
+						var row = _dataItems[startx];
+						row[indexy] = rowmove[startx];
+					}
+					startx++;
+				}
+				startx = startxval;
+				//move special
+				var rowsource = [];
+				var rowmove = [];
+				/////////////////////////
+				{
+					while(startx <= endx)
+					{
+						if(_arrSpecial[startx] !== undefined)
+						{
+							var row = _arrSpecial[startx];
+							rowsource[startx] = row[indexy];
+						}
+						startx++;
+					}
+					startx = startxval;
+					while(startx <= endx)
+					{
+						if(_arrSpecial[startx] !== undefined)
+						{
+							var row = _arrSpecial[startx];
+							rowmove[startx] = HandleObject(row[starty]);
+							if(ifmove)
+								row[starty] = HandleObject(rowsource[startx]);
+						}
+						startx++;
+					}
+					startx = startxval;
+					while(startx <= endx)
+					{
+						if(_arrSpecial[startx] !== undefined)
+						{
+							var row = _arrSpecial[startx];
+							row[indexy] = rowmove[startx];
+						}
+						startx++;
+					}
+					startx = startxval;
+				}
+			}
+			//format
+			var rowsource = [];
+			var rowmove = [];
+			if(ifformat)
+			{
+				while(startx <= endx)
+				{
+					if(_arrColors[startx] !== undefined)
+					{
+						var row = _arrColors[startx];
+						rowsource[startx] = row[indexy];
+					}
+					startx++;
+				}
+				startx = startxval;
+				while(startx <= endx)
+				{
+					if(_arrColors[startx] !== undefined)
+					{
+						var row = _arrColors[startx];
+						rowmove[startx] = HandleObject(row[starty]);
+						if(ifmove)
+							row[starty] = HandleObject(rowsource[startx]);
+					}
+					startx++;
+				}
+				startx = startxval;
+				while(startx <= endx)
+				{
+					if(_arrColors[startx] !== undefined)
+					{
+						var row = _arrColors[startx];
+						row[indexy] = rowmove[startx];
+					}
+					startx++;
+				}
+				startx = startxval;
+			}
+			if(direction == "right")
+			{
+				starty++;
+				endy++;
+			}else
+			{
+				starty--;
+				endy--;
+			}
+		 }
+		 _htable.selectCell(startx,starty,endx,endy);
+		 RefreshTable();
+	}
+	
 	function ImportFormat(row,col,format)
 	{
 		if(_arrColors[row] !== undefined)					
@@ -540,6 +871,68 @@ W3Ex.vtfModule = (function ($) {
 			 {
 			 	$(_but.remcolor).button('disable');
 			 }
+			 if((startxval - endx === 0)&&(startyval - endy === 0)){
+			 	//single cell
+				$(_but.left).button('enable');
+				$(_but.right).button('enable');
+				$(_but.up).button('enable');
+				$(_but.down).button('enable');
+				if(startxval === 0)
+				{
+					$(_but.up).button('disable');
+				}
+				if((endx+1) === rowcount)
+				{
+					$(_but.down).button('disable');
+				}
+				if(startyval === 0)
+				{
+					$(_but.left).button('disable');
+				}
+				if((endy+1) === colcount)
+				{
+					$(_but.right).button('disable');
+				}
+			 }else
+			 {
+				if(startyval - endy == 0)
+				{//single column, enable left/right
+					if(startyval === 0)
+					{
+						$(_but.left).button('disable');
+					}else
+						$(_but.left).button('enable');
+					if((endy+1) === colcount)
+					{
+						$(_but.right).button('disable');
+					}else
+						$(_but.right).button('enable');
+					
+					$(_but.up).button('disable');
+					$(_but.down).button('disable');
+					
+				}else if(startxval - endx === 0)
+				{//single row, enable up/down
+					if(startxval === 0)
+					{
+						$(_but.up).button('disable');
+					}else
+						$(_but.up).button('enable');
+					if((endx+1) === rowcount)
+					{
+						$(_but.down).button('disable');
+					}else
+						$(_but.down).button('enable');
+					$(_but.left).button('disable');
+					$(_but.right).button('disable');
+				}else
+				{//too much to move
+					$(_but.left).button('disable');
+					$(_but.right).button('disable');
+					$(_but.up).button('disable');
+					$(_but.down).button('disable');
+				}
+			 }
 		 }
 	}
 	 
@@ -724,6 +1117,33 @@ W3Ex.vtfModule = (function ($) {
 			}
 			_arrColors.splice(start,counttemp);
 		}
+		counttemp = count;
+		if(start < _arrSpecial.length)
+		{
+			if((start + count) >= _arrSpecial.length)
+			{
+				counttemp = _arrSpecial.length - start;
+			}
+			_arrSpecial.splice(start,counttemp);
+		}
+		counttemp = count;
+		while(counttemp !== 0)
+		{
+			for(var i=0; i < _arrMerge.length; i++)
+			{
+				if(_arrMerge[i] === undefined) continue;
+					var arrMerge = _arrMerge[i];
+					if(arrMerge[2] >= ((start-1) + counttemp))
+					{
+						if(arrMerge[0] <= ((start-1) + counttemp))
+						{
+							_arrMerge.splice(i,1);
+							i--;
+						}
+					}
+		 	 }
+			 counttemp--;
+		}
 	}
 	function UpdateColumns(start,count)
 	{
@@ -742,6 +1162,114 @@ W3Ex.vtfModule = (function ($) {
 				arrRow.splice(start,counttemp);
 			}
 		}
+		for(var j=0 ; j < _arrSpecial.length ; j++)
+		{
+			if(_arrSpecial[j] === undefined) continue;
+			counttemp = count;
+			var arrRow = _arrSpecial[j];
+			if(start < arrRow.length)
+			{
+				if((start + count) >= arrRow.length)
+				{
+					counttemp = arrRow.length - start;
+				}
+				arrRow.splice(start,counttemp);
+			}
+		}
+		counttemp = count;
+		while(counttemp !== 0)
+		{
+			for(var i=0; i < _arrMerge.length; i++)
+			{
+				if(_arrMerge[i] === undefined) continue;
+				var arrMerge = _arrMerge[i];
+				if(arrMerge[3] >= ((start-1) + counttemp))
+				{
+					if(arrMerge[1] <= ((start-1) + counttemp))
+					{
+						_arrMerge.splice(i,1);
+						i--;
+					}
+				}
+		 	 }
+			 counttemp--;
+		}
+	}
+	
+		
+	function UpdateRowsCreate(start,count)
+	{
+		var counttemp = count;
+		if(start < _arrColors.length)
+		{
+			_arrColors.splice(start,0,[]);
+		}
+		counttemp = count;
+		if(start < _arrSpecial.length)
+		{
+			_arrSpecial.splice(start,0,[]);
+		}
+		counttemp = count;
+		while(counttemp !== 0)
+		{
+			for(var i=0; i < _arrMerge.length; i++)
+			{
+				if(_arrMerge[i] === undefined) continue;
+					var arrMerge = _arrMerge[i];
+					if(arrMerge[2] >= ((start-1) + counttemp))
+					{
+						if(arrMerge[0] <= ((start-1) + counttemp))
+						{
+							_arrMerge.splice(i,1);
+							i--;
+						}
+					}
+		 	 }
+			 counttemp--;
+		}
+	}
+	
+	function UpdateColumnsCreate(start,count)
+	{
+		var counttemp = count;
+		for(var ii=0 ; ii < _arrColors.length ; ii++)
+		{
+			if(_arrColors[ii] === undefined) continue;
+			counttemp = count;
+			var arrRow = _arrColors[ii];
+			if(start < arrRow.length)
+			{
+				arrRow.splice(start,0,{});
+			}
+		}
+		for(var j=0 ; j < _arrSpecial.length ; j++)
+		{
+			if(_arrSpecial[j] === undefined) continue;
+			counttemp = count;
+			var arrRow = _arrSpecial[j];
+			if(start < arrRow.length)
+			{
+				arrRow.splice(start,0,{});
+			}
+		}
+		counttemp = count;
+		while(counttemp !== 0)
+		{
+			for(var i=0; i < _arrMerge.length; i++)
+			{
+				if(_arrMerge[i] === undefined) continue;
+				var arrMerge = _arrMerge[i];
+				if(arrMerge[3] >= ((start-1) + counttemp))
+				{
+					if(arrMerge[1] <= ((start-1) + counttemp))
+					{
+						_arrMerge.splice(i,1);
+						i--;
+					}
+				}
+		 	 }
+			 counttemp--;
+		}
 	}
 		//init
 		(function(){
@@ -757,7 +1285,9 @@ W3Ex.vtfModule = (function ($) {
 						 
             	$(_thetable).handsontable({
               	data: _dataItems,
-      			contextMenu: false,
+      			startRows: 4,
+ 				startCols: 4,
+      			contextMenu: ["row_above", "row_below", "col_left", "col_right", "remove_row", "remove_col"],
       			outsideClickDeselects: false,
                 fillHandle:false,
                 cells: function (row, col, prop) {
@@ -767,7 +1297,9 @@ W3Ex.vtfModule = (function ($) {
                 },
 			    afterSelectionEnd: UpdateButtonStatus,
 			    beforeRemoveRow: UpdateRows,
-			    beforeRemoveCol: UpdateColumns
+			    beforeRemoveCol: UpdateColumns,
+				afterCreateRow: UpdateRowsCreate,
+				afterCreateCol: UpdateColumnsCreate
             });//END:show table
 			_htable = $(_thetable).handsontable('getInstance');			
 			//show color picker
@@ -792,7 +1324,8 @@ W3Ex.vtfModule = (function ($) {
 				}
 	    	});
         	$('#w3exvtf-colsp').click(function(){
-        		_htable.alter('insert_col',null);
+        		var Cols = _htable.countCols();
+        		_htable.alter('insert_col',Cols);
         	});
         	$('#w3exvtf-rowsm').click(function(){
    				var Rows = _htable.countRows();
@@ -803,7 +1336,8 @@ W3Ex.vtfModule = (function ($) {
         		}
 			});
         	$('#w3exvtf-rowsp').click(function(){
-				_htable.alter('insert_row',null);
+				var Rows = _htable.countRows();
+				_htable.alter('insert_row',Rows);
 			});
 			$('#w3exvtf-cellmin').button().click(function(){
 				if(_cellsize === 1 || _cellsize === 0)
@@ -890,7 +1424,31 @@ W3Ex.vtfModule = (function ($) {
 				var isset = $(_but.bold).prop('checked');
 				SetRangeFormat(_F.BOLD,isset);
         	 });
-			
+			$(_but.up).button({
+	        	text: false,
+	       		icons: { primary: "ui-icon-arrowthick-1-n" , secondary: null }}).click(function(e)
+				{
+					HandleMove("up");
+				});
+			$(_but.down).button({
+	        	text: false,
+	        	icons: { primary: "ui-icon-arrowthick-1-s" , secondary: null }}).click(function(e)
+				{
+				 	HandleMove("down");
+				});
+			$(_but.left).button({
+	        	text: false,
+	        	icons: { primary: "ui-icon-arrowthick-1-w" , secondary: null }}).click(function(e)
+				{
+					HandleMove("left");
+				});
+			$(_but.right).button({
+	        	text: false,
+	        	icons: { primary: "ui-icon-arrowthick-1-e" , secondary: null }}).click(function(e)
+				{
+					HandleMove("right");
+				});
+				
 			$('#w3exvtf-gendata').button().click(function(){
 				var text = $('#w3exvtf-importdata').val();
 				if(isBlank(text)) return;
