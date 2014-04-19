@@ -26,6 +26,34 @@ defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
 		<td>Cell Size: <button id="w3exvtf-cellmin">-</button><button id="w3exvtf-cellplus">+</button>&nbsp;&nbsp;</td>
 		</tr>
 	</table>
+	<table>
+<tr>
+	<td style="padding-top:3px;"> Selected area:<br/>
+	(within row/col)
+	</td>
+	<td>
+	<select id="w3exvtf-move">
+  <option value="move">Move</option>
+  <option value="copy">Copy</option>
+  </select>
+  	<select id="w3exvtf-text">
+  <option value="textformat">Text & Format</option>
+  <option value="text">Text</option>
+  <option value="format">Format</option>
+  </select>&nbsp;
+  </td>
+   <td>
+  	<button id="w3exvtf-left" style="width:21px;"></button>
+	</td>
+  <td>
+  	<button id="w3exvtf-up" style="width:21px;"></button><br>
+	<button id="w3exvtf-down" style="width:21px;"></button>
+  </td>
+ <td>
+	<button id="w3exvtf-right" style="width:21px;"></button>
+  </td>
+		</tr>
+	</table>
 </div>
  <div style="clear:both"></div>
 <div id="w3exvtf-parent" class="unselectable" unselectable="on">

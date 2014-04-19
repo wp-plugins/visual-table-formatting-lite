@@ -4,7 +4,7 @@ Plugin Name: Visual Table Formatting Lite
 Plugin URI: http://www.w3examples.com
 Description: Create tables visually 
 Author: George Iron
-Version: 1.0
+Version: 1.1
 Author URI: http://www.w3examples.com
 */
 

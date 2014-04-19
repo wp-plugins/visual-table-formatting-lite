@@ -31,6 +31,10 @@ Howtos with screenshots
 Upload the Visual Table Formatting Lite plugin to your blog and activate it.
 
 == Changelog ==
+= 1.1 =
+* Add/remove rows/columns via context menu
+* Copy/move text/format
+
 = 1.0 =
 * Initial release
 
