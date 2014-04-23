@@ -9,7 +9,7 @@ Contributors: GeorgeIron
 Stable Tag: trunk
 License: GPLv2 or later
 
-Create html tables using a visual edtior.
+Create html tables using a visual editor.
 
 == Description ==
 Creating and managing colorful tables has never been more intuitive and straightforward with this plugin.
