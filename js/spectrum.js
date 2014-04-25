@@ -1104,8 +1104,7 @@
                     }
 
                     return "progid:DXImageTransform.Microsoft.gradient("+gradientType+"startColorstr=#" + pad2(alphaHex) + hex + ",endColorstr=#" + pad2(secondAlphaHex) + secondHex + ")";
-                }
-				,
+                },
                 toString: function(format) {
                     format = format || this.format;
                     var formattedString = false;
@@ -1130,8 +1129,7 @@
                     if (format === "hsv") {
                         formattedString = this.toHsvString();
                     }
-					if(this.toHexString == undefined)
-						return "";
+
                     return formattedString || this.toHexString();
                 }
             };
