@@ -3,13 +3,13 @@ Author: GeorgeIron
 Homepage: http://www.w3examples.com
 Donate link: http://www.w3examples.com/donate.php
 Tags: tables, formatting, cell color
-Tested up to: 3.9
+Tested up to: 3.9.1
 Requires at least: 3.5
 Contributors: GeorgeIron
 Stable Tag: trunk
 License: GPLv2 or later
 
-Create html tables using a visual editor.
+Create html tables using a visual edtior.
 
 == Description ==
 Creating and managing colorful tables has never been more intuitive and straightforward with this plugin.
@@ -29,7 +29,7 @@ The plugin has two handy import functions - used shortcodes and delimiter-separa
 There is also a **PRO** version available [here](http://www.w3examples.com/wordpress/visual_table_formatting_pro.php)
 
 Howtos with screenshots
-[Plugin Howtos](http://www.w3examples.com/wordpress/table_formatting_lite.php)
+[Plugin Howtos](http://www.w3examples.com/wordpress/visual_table_formatting_lite.php)
 
 == Installation ==
 Upload the Visual Table Formatting Lite plugin to your blog and activate it.
